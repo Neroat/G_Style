@@ -1,0 +1,41 @@
+package com.rollingstone.gstyle.controller;
+
+import com.rollingstone.gstyle.dto.survey.RequestSurveyDTO;
+import com.rollingstone.gstyle.dto.survey.ResponseSurveyDTO;
+import com.rollingstone.gstyle.service.survey.SurveyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/survey")
+public class SurveyController {
+
+    private final SurveyService surveyService;
+
+    @Autowired
+    public SurveyController(SurveyService surveyService) {
+        this.surveyService = surveyService;
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<ResponseSurveyDTO>> list(@RequestParam String date) {
+        List<ResponseSurveyDTO> surveyDTOList = surveyService.getListSurveyByCreatedAt(date);
+        return ResponseEntity.status(HttpStatus.OK).body(surveyDTOList);
+    }
+
+    @PostMapping("/insert")
+    public ResponseEntity<ResponseSurveyDTO> insert(@RequestBody RequestSurveyDTO requestSurveyDTO) throws Exception{
+        ResponseSurveyDTO result = surveyService.saveSurvey(requestSurveyDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ResponseSurveyDTO>> all() {
+        List<ResponseSurveyDTO> surveyDTOList = surveyService.getListAllSurvey();
+        return ResponseEntity.status(HttpStatus.OK).body(surveyDTOList);
+    }
+}
