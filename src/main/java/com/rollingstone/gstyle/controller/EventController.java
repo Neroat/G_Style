@@ -5,6 +5,7 @@ import com.rollingstone.gstyle.service.event.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,12 @@ public class EventController {
         List<ResponseEventDTO> eventDTOList = eventService.getListEventOrderByCountDesc();
         List<ResponseEventDTO> newDTOList = eventDTOList.subList(0,3);
         return ResponseEntity.status(HttpStatus.OK).body(newDTOList);
+    }
+
+    @DeleteMapping("/init")
+    public ResponseEntity<String> init() {
+        eventService.truncateEventTable();
+        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
     }
 
 }

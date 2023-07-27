@@ -17,5 +17,5 @@ public interface NoticeService {
 
     ResponseNoticeDTO getNoticeById(Long id);
 
-
+    void truncateNoticeTable();
 }

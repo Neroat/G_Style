@@ -38,4 +38,9 @@ public class SurveyDAOImpl implements SurveyDAO{
     public List<Survey> listAllSurvey() {
         return surveyRepository.findAll();
     }
+
+    @Override
+    public void truncateSurveyTable() {
+        surveyRepository.truncateSurveyTable();
+    }
 }

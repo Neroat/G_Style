@@ -50,4 +50,10 @@ public class NoticeController {
         noticeService.deleteNotice(id);
         return ResponseEntity.status(HttpStatus.OK).body("정상적으로 삭제됨.");
     }
+
+    @DeleteMapping("/init")
+    public ResponseEntity<String> init() {
+        noticeService.truncateNoticeTable();
+        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+    }
 }

@@ -51,4 +51,10 @@ public class PatchNoteController {
         return ResponseEntity.status(HttpStatus.OK).body("정상적으로 삭제됨.");
     }
 
+    @DeleteMapping("/init")
+    public ResponseEntity<String> init() {
+        patchNoteService.truncatePatchNoteTable();
+        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+    }
+
 }

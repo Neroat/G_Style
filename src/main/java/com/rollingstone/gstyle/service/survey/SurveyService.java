@@ -11,4 +11,6 @@ public interface SurveyService {
     List<ResponseSurveyDTO> getListSurveyByCreatedAt(String date);
 
     List<ResponseSurveyDTO> getListAllSurvey();
+
+    void truncateSurveyTable();
 }

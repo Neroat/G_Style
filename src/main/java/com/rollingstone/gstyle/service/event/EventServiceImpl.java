@@ -48,4 +48,9 @@ public class EventServiceImpl implements EventService{
                 new ResponseEventDTO(event)).collect(Collectors.toList());
         return responseEventDTOList;
     }
+
+    @Override
+    public void truncateEventTable() {
+        eventDAO.truncateEventTable();
+    }
 }

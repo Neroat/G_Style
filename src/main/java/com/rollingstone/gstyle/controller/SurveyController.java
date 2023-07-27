@@ -38,4 +38,10 @@ public class SurveyController {
         List<ResponseSurveyDTO> surveyDTOList = surveyService.getListAllSurvey();
         return ResponseEntity.status(HttpStatus.OK).body(surveyDTOList);
     }
+
+    @DeleteMapping("/init")
+    public ResponseEntity<String> init() {
+        surveyService.truncateSurveyTable();
+        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+    }
 }

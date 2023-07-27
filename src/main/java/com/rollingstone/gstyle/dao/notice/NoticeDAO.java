@@ -10,4 +10,6 @@ public interface NoticeDAO {
     void deleteNotice(Long id) throws Exception;
     List<Notice> listNoticeOrderByCreatedAtDesc();
     Notice selectedNotice(Long id);
+
+    void truncateNoticeTable();
 }

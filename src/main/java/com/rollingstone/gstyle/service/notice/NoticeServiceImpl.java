@@ -63,4 +63,9 @@ public class NoticeServiceImpl implements NoticeService{
         Notice selectNotice = noticeDAO.selectedNotice(id);
         return new ResponseNoticeDTO(selectNotice);
     }
+
+    @Override
+    public void truncateNoticeTable() {
+        noticeDAO.truncateNoticeTable();
+    }
 }

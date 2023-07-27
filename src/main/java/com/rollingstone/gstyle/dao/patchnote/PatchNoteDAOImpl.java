@@ -59,4 +59,9 @@ public class PatchNoteDAOImpl implements PatchNoteDAO{
     public PatchNote selectedPatchNote(Long id) {
         return patchNoteRepository.findPatchNoteById(id);
     }
+
+    @Override
+    public void truncatePatchNoteTable() {
+        patchNoteRepository.truncatePatchNoteTable();
+    }
 }

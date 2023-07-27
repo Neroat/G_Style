@@ -16,4 +16,6 @@ public interface PatchNoteService {
     List<ResponsePatchNoteDTO> getListPatchNoteOrderByCreatedAtDesc();
 
     ResponsePatchNoteDTO getPatchNoteById(Long id);
+
+    void truncatePatchNoteTable();
 }

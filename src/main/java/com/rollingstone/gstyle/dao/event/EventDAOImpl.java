@@ -39,4 +39,9 @@ public class EventDAOImpl implements EventDAO{
     public List<Event> listEventOrderByClass_CountDesc() {
         return eventRepository.findAllEventByOrderByClasscountDesc();
     }
+
+    @Override
+    public void truncateEventTable() {
+        eventRepository.truncateEventTable();
+    }
 }

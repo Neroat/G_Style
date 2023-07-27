@@ -21,8 +21,6 @@ public class SurveyServiceImpl implements SurveyService{
     private final SurveyDAO surveyDAO;
     private final EventDAO eventDAO;
 
-
-
     @Autowired
     public SurveyServiceImpl(SurveyDAO surveyDAO, EventDAO eventDAO) {
         this.surveyDAO = surveyDAO;
@@ -94,5 +92,10 @@ public class SurveyServiceImpl implements SurveyService{
         String cutStu = stu_no.toString().substring(0,3);
         Long edit_stu_no = Long.parseLong(cutStu);
         return edit_stu_no;
+    }
+
+    @Override
+    public void truncateSurveyTable() {
+        surveyDAO.truncateSurveyTable();
     }
 }

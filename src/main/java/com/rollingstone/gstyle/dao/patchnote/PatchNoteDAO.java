@@ -11,4 +11,6 @@ public interface PatchNoteDAO {
     void deletePatchNote(Long id) throws Exception;
     List<PatchNote> listPatchNoteOrderByCreatedAtDesc();
     PatchNote selectedPatchNote(Long id);
+
+    void truncatePatchNoteTable();
 }

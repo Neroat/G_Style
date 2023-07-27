@@ -9,4 +9,6 @@ public interface EventService {
     void countUp(Long stu_no) throws Exception;
 
     List<ResponseEventDTO> getListEventOrderByCountDesc();
+
+    void truncateEventTable();
 }

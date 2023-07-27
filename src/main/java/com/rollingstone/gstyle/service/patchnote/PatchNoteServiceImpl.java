@@ -63,4 +63,9 @@ public class PatchNoteServiceImpl implements PatchNoteService {
         PatchNote selectPatchNote = patchNoteDAO.selectedPatchNote(id);
         return new ResponsePatchNoteDTO(selectPatchNote);
     }
+
+    @Override
+    public void truncatePatchNoteTable() {
+        patchNoteDAO.truncatePatchNoteTable();
+    }
 }

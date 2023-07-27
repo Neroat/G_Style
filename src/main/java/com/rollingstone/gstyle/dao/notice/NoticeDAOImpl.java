@@ -59,4 +59,9 @@ public class NoticeDAOImpl implements NoticeDAO{
     public Notice selectedNotice(Long id) {
         return noticeRepository.findNoticeById(id);
     }
+
+    @Override
+    public void truncateNoticeTable() {
+        noticeRepository.truncateNoticeTable();
+    }
 }

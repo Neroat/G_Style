@@ -12,4 +12,6 @@ public interface SurveyDAO {
     Boolean existsSurveyByStu_NoAndDate(Long stu_no, String date);
 
     List<Survey> listAllSurvey();
+
+    void truncateSurveyTable();
 }
