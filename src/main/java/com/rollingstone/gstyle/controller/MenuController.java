@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/menu")
 public class MenuController {
@@ -23,6 +25,12 @@ public class MenuController {
     public ResponseEntity todayMenus(String date) {
         ResponseMenuDTO responseMenuDTO = menuService.getMenus(date);
         return new ResponseEntity(responseMenuDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/period")
+    public ResponseEntity periodMenus(String fromDate, String toDate) {
+        List<ResponseMenuDTO> menuDTOList = menuService.getMenusPeriod(fromDate, toDate);
+        return new ResponseEntity(menuDTOList, HttpStatus.OK);
     }
 
 }

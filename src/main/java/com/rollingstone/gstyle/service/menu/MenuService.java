@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,13 +40,18 @@ public class MenuService {
 //    }
 
     public ResponseMenuDTO getMenus(String date) {
-        ResponseEntity<String> json = jsonResponse(date);
+        ResponseEntity<String> json = jsonResponseToday(date);
         return parsingMenu(json);
+    }
+
+    public List<ResponseMenuDTO> getMenusPeriod(String fromDate, String toDate) {
+        ResponseEntity<String> json = jsonResponsePeriod(fromDate, toDate);
+        return parsingPeriodMenus(json);
     }
 
 
     //교육청 API를 통해 특정 날짜 급식 JSON을 반환
-    private ResponseEntity<String> jsonResponse(String date) {
+    private ResponseEntity<String> jsonResponseToday(String date) {
         buffer = StandardCharsets.UTF_8.encode(key);
         encode = StandardCharsets.UTF_8.decode(buffer).toString();
         uri = UriComponentsBuilder
@@ -86,6 +92,53 @@ public class MenuService {
         return responseMenuDTO;
     }
 
+    private ResponseEntity<String> jsonResponsePeriod(String fromDate, String toDate) {
+        buffer = StandardCharsets.UTF_8.encode(key);
+        encode = StandardCharsets.UTF_8.decode(buffer).toString();
+        uri = UriComponentsBuilder
+                .fromUriString("https://open.neis.go.kr")
+                .path("/hub/mealServiceDietInfo")
+                .queryParam("KEY", key)
+                .queryParam("Type","json")
+                .queryParam("pIndex", 1)
+                .queryParam("pSize", 100)
+                .queryParam("ATPT_OFCDC_SC_CODE", education_code)
+                .queryParam("SD_SCHUL_CODE", school_code)
+                .queryParam("MLSV_FROM_YMD", fromDate)
+                .queryParam("MLSV_TO_YMD", toDate)
+                .encode()
+                .build()
+                .toUri();
+
+        return getResponseEntity(uri);
+    }
+
+    private List<ResponseMenuDTO> parsingPeriodMenus(ResponseEntity<String> result) {
+        //ResponseMenuDTO responseMenuDTO = new ResponseMenuDTO();
+        List<ResponseMenuDTO> menuDTOList = new ArrayList<>();
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject) parser.parse(result.getBody());
+            JSONArray menuItems = (JSONArray) object.get("mealServiceDietInfo");
+            object = (JSONObject) menuItems.get(1);
+            menuItems = (JSONArray) object.get("row");
+            for(int i = 0; i < menuItems.size(); i++) {
+                object = (JSONObject) menuItems.get(i);
+                ResponseMenuDTO item = new ResponseMenuDTO();
+
+                String lunchDate = (String) object.get("MLSV_YMD");
+                String menus = (String) object.get("DDISH_NM");
+                List<String> splitMenus = Arrays.asList(menus.split("<br/>"));
+                item.setLunchDate(lunchDate);
+                item.setMenus(splitMenus);
+                menuDTOList.add(item);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return menuDTOList;
+    }
 
     private ResponseEntity<String> getResponseEntity(URI uri) {
         RestTemplate restTemplate = new RestTemplate();
