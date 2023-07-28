@@ -82,6 +82,10 @@ public class MenuService {
                 object = (JSONObject) menuItems.get(0);
 
                 String lunchDate = (String) object.get("MLSV_YMD");
+                StringBuffer sb = new StringBuffer(lunchDate);
+                sb.insert(6, "-");
+                sb.insert(4, "-");
+                lunchDate = sb.toString();
                 String menus = (String) object.get("DDISH_NM");
                 List<String> splitMenus = Arrays.asList(menus.split("<br/>"));
                 responseMenuDTO.setLunchDate(lunchDate);
@@ -127,6 +131,10 @@ public class MenuService {
                 ResponseMenuDTO item = new ResponseMenuDTO();
 
                 String lunchDate = (String) object.get("MLSV_YMD");
+                StringBuffer sb = new StringBuffer(lunchDate);
+                sb.insert(6, "-");
+                sb.insert(4, "-");
+                lunchDate = sb.toString();
                 String menus = (String) object.get("DDISH_NM");
                 List<String> splitMenus = Arrays.asList(menus.split("<br/>"));
                 item.setLunchDate(lunchDate);

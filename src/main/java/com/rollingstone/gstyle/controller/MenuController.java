@@ -23,12 +23,15 @@ public class MenuController {
 
     @GetMapping("/today")
     public ResponseEntity todayMenus(String date) {
+        date = date.replaceAll("-", "");
         ResponseMenuDTO responseMenuDTO = menuService.getMenus(date);
         return new ResponseEntity(responseMenuDTO, HttpStatus.OK);
     }
 
     @GetMapping("/period")
     public ResponseEntity periodMenus(String fromDate, String toDate) {
+        fromDate = fromDate.replaceAll("-", "");
+        toDate = toDate.replaceAll("-", "");
         List<ResponseMenuDTO> menuDTOList = menuService.getMenusPeriod(fromDate, toDate);
         return new ResponseEntity(menuDTOList, HttpStatus.OK);
     }
