@@ -11,4 +11,6 @@ public interface EventService {
     List<ResponseEventDTO> getListEventOrderByCountDesc();
 
     void truncateEventTable();
+
+    void insertClass();
 }
