@@ -49,20 +49,32 @@ public class PatchNoteController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam Long survey_id, @RequestParam String id, @RequestParam String password) throws Exception {
-        if(defaultValidIdPwd.isRight(id, password)) {
+    public ResponseEntity<String> delete(@RequestParam Long survey_id) throws Exception {
             patchNoteService.deleteNotice(survey_id);
             return ResponseEntity.status(HttpStatus.OK).body("정상적으로 삭제됨.");
-        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
-
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
-        if(defaultValidIdPwd.isRight(id, password)) {
+    public ResponseEntity<String> init() {
             patchNoteService.truncatePatchNoteTable();
             return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
-        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
     }
+
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<String> delete(@RequestParam Long survey_id, @RequestParam String id, @RequestParam String password) throws Exception {
+//        if(defaultValidIdPwd.isRight(id, password)) {
+//            patchNoteService.deleteNotice(survey_id);
+//            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 삭제됨.");
+//        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
+//
+//    }
+//
+//    @DeleteMapping("/init")
+//    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
+//        if(defaultValidIdPwd.isRight(id, password)) {
+//            patchNoteService.truncatePatchNoteTable();
+//            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+//        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
+//    }
 
 }

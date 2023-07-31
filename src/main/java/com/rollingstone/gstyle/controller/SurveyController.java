@@ -43,10 +43,16 @@ public class SurveyController {
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
-        if(defaultValidIdPwd.isRight(id, password)) {
+    public ResponseEntity<String> init() {
             surveyService.truncateSurveyTable();
             return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
-        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
     }
+
+//    @DeleteMapping("/init")
+//    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
+//        if(defaultValidIdPwd.isRight(id, password)) {
+//            surveyService.truncateSurveyTable();
+//            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+//        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
+//    }
 }

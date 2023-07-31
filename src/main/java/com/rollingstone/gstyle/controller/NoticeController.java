@@ -55,11 +55,16 @@ public class NoticeController {
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
-        if(defaultValidIdPwd.isRight(id, password)) {
+    public ResponseEntity<String> init() {
             noticeService.truncateNoticeTable();
             return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
-        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
-
     }
+
+//    @DeleteMapping("/init")
+//    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
+//        if(defaultValidIdPwd.isRight(id, password)) {
+//            noticeService.truncateNoticeTable();
+//            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+//        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
+//    }
 }

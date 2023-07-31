@@ -32,18 +32,30 @@ public class EventController {
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
-        if(defaultValidIdPwd.isRight(id, password)) {
+    public ResponseEntity<String> init() {
             eventService.truncateEventTable();
             return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
-        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
     }
 
     @PutMapping("class")
-    public ResponseEntity<String> insertClass(@RequestParam String id, @RequestParam String password) {
-        if(defaultValidIdPwd.isRight(id, password)) {
+    public ResponseEntity<String> insertClass() {
             eventService.insertClass();
             return ResponseEntity.status(HttpStatus.OK).body("정상적으로 학년반이 입력됨.");
-        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
     }
+
+//    @DeleteMapping("/init")
+//    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
+//        if(defaultValidIdPwd.isRight(id, password)) {
+//            eventService.truncateEventTable();
+//            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+//        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
+//    }
+//
+//    @PutMapping("class")
+//    public ResponseEntity<String> insertClass(@RequestParam String id, @RequestParam String password) {
+//        if(defaultValidIdPwd.isRight(id, password)) {
+//            eventService.insertClass();
+//            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 학년반이 입력됨.");
+//        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
+//    }
 }
