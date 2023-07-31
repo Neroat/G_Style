@@ -2,6 +2,7 @@ package com.rollingstone.gstyle.controller;
 
 import com.rollingstone.gstyle.dto.patchnote.RequestPatchNoteDTO;
 import com.rollingstone.gstyle.dto.patchnote.ResponsePatchNoteDTO;
+import com.rollingstone.gstyle.service.DefaultValidIdPwd;
 import com.rollingstone.gstyle.service.patchnote.PatchNoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,11 +15,13 @@ import java.util.List;
 @RequestMapping("/api/patchnote")
 public class PatchNoteController {
 
+    private final DefaultValidIdPwd defaultValidIdPwd;
     private final PatchNoteService patchNoteService;
 
     @Autowired
-    public PatchNoteController(PatchNoteService patchNoteService) {
+    public PatchNoteController(PatchNoteService patchNoteService, DefaultValidIdPwd defaultValidIdPwd) {
         this.patchNoteService = patchNoteService;
+        this.defaultValidIdPwd = defaultValidIdPwd;
     }
 
     @GetMapping("/list")
@@ -46,15 +49,20 @@ public class PatchNoteController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestParam Long id) throws Exception {
-        patchNoteService.deleteNotice(id);
-        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 삭제됨.");
+    public ResponseEntity<String> delete(@RequestParam Long survey_id, @RequestParam String id, @RequestParam String password) throws Exception {
+        if(defaultValidIdPwd.isRight(id, password)) {
+            patchNoteService.deleteNotice(survey_id);
+            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 삭제됨.");
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
+
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<String> init() {
-        patchNoteService.truncatePatchNoteTable();
-        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
+        if(defaultValidIdPwd.isRight(id, password)) {
+            patchNoteService.truncatePatchNoteTable();
+            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
     }
 
 }

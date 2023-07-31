@@ -2,6 +2,7 @@ package com.rollingstone.gstyle.controller;
 
 import com.rollingstone.gstyle.dto.notice.RequestNoticeDTO;
 import com.rollingstone.gstyle.dto.notice.ResponseNoticeDTO;
+import com.rollingstone.gstyle.service.DefaultValidIdPwd;
 import com.rollingstone.gstyle.service.notice.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,11 +15,13 @@ import java.util.List;
 @RequestMapping("/api/notice")
 public class NoticeController {
 
+    private final DefaultValidIdPwd defaultValidIdPwd;
     private final NoticeService noticeService;
 
     @Autowired
-    public NoticeController(NoticeService noticeService) {
+    public NoticeController(NoticeService noticeService, DefaultValidIdPwd defaultValidIdPwd) {
         this.noticeService = noticeService;
+        this.defaultValidIdPwd = defaultValidIdPwd;
     }
 
     @GetMapping("/detail")
@@ -52,8 +55,11 @@ public class NoticeController {
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<String> init() {
-        noticeService.truncateNoticeTable();
-        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
+        if(defaultValidIdPwd.isRight(id, password)) {
+            noticeService.truncateNoticeTable();
+            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
+
     }
 }

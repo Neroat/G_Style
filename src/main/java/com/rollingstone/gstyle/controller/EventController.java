@@ -1,6 +1,7 @@
 package com.rollingstone.gstyle.controller;
 
 import com.rollingstone.gstyle.dto.event.ResponseEventDTO;
+import com.rollingstone.gstyle.service.DefaultValidIdPwd;
 import com.rollingstone.gstyle.service.event.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,11 +14,14 @@ import java.util.List;
 @RequestMapping("/api/event")
 public class EventController {
 
+    private final DefaultValidIdPwd defaultValidIdPwd;
+
     private final EventService eventService;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, DefaultValidIdPwd defaultValidIdPwd) {
         this.eventService = eventService;
+        this.defaultValidIdPwd = defaultValidIdPwd;
     }
 
     @GetMapping("/rank")
@@ -28,14 +32,18 @@ public class EventController {
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<String> init() {
-        eventService.truncateEventTable();
-        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
+        if(defaultValidIdPwd.isRight(id, password)) {
+            eventService.truncateEventTable();
+            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
     }
 
     @PutMapping("class")
-    public ResponseEntity<String> insertClass() {
-        eventService.insertClass();
-        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 학년반이 입력됨.");
+    public ResponseEntity<String> insertClass(@RequestParam String id, @RequestParam String password) {
+        if(defaultValidIdPwd.isRight(id, password)) {
+            eventService.insertClass();
+            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 학년반이 입력됨.");
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
     }
 }

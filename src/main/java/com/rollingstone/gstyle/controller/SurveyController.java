@@ -2,6 +2,7 @@ package com.rollingstone.gstyle.controller;
 
 import com.rollingstone.gstyle.dto.survey.RequestSurveyDTO;
 import com.rollingstone.gstyle.dto.survey.ResponseSurveyDTO;
+import com.rollingstone.gstyle.service.DefaultValidIdPwd;
 import com.rollingstone.gstyle.service.survey.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,11 +15,13 @@ import java.util.List;
 @RequestMapping("/api/survey")
 public class SurveyController {
 
+    private final DefaultValidIdPwd defaultValidIdPwd;
     private final SurveyService surveyService;
 
     @Autowired
-    public SurveyController(SurveyService surveyService) {
+    public SurveyController(SurveyService surveyService, DefaultValidIdPwd defaultValidIdPwd) {
         this.surveyService = surveyService;
+        this.defaultValidIdPwd = defaultValidIdPwd;
     }
 
     @GetMapping("/list")
@@ -40,8 +43,10 @@ public class SurveyController {
     }
 
     @DeleteMapping("/init")
-    public ResponseEntity<String> init() {
-        surveyService.truncateSurveyTable();
-        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+    public ResponseEntity<String> init(@RequestParam String id, @RequestParam String password) {
+        if(defaultValidIdPwd.isRight(id, password)) {
+            surveyService.truncateSurveyTable();
+            return ResponseEntity.status(HttpStatus.OK).body("정상적으로 초기화 됨.");
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ID와 PASSWORD가 잘못됨.");
     }
 }
