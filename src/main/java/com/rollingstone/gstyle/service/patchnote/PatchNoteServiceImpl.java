@@ -3,6 +3,7 @@ package com.rollingstone.gstyle.service.patchnote;
 import com.rollingstone.gstyle.dao.patchnote.PatchNoteDAO;
 import com.rollingstone.gstyle.dto.patchnote.RequestPatchNoteDTO;
 import com.rollingstone.gstyle.dto.patchnote.ResponsePatchNoteDTO;
+import com.rollingstone.gstyle.dto.patchnote.UpdatePatchNoteDTO;
 import com.rollingstone.gstyle.entity.PatchNote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class PatchNoteServiceImpl implements PatchNoteService {
     }
 
     @Override
-    public ResponsePatchNoteDTO updatePatchNote(Long id, String title, String description) throws Exception {
-        PatchNote changePatchNote = patchNoteDAO.updatePatchNote(id, title, description);
+    public ResponsePatchNoteDTO updatePatchNote(UpdatePatchNoteDTO updatePatchNoteDTO) throws Exception {
+        PatchNote changePatchNote = patchNoteDAO.updatePatchNote(updatePatchNoteDTO.getId(), updatePatchNoteDTO.getTitle(), updatePatchNoteDTO.getDescription());
         return new ResponsePatchNoteDTO(changePatchNote);
     }
 

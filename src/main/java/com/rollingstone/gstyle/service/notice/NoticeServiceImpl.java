@@ -3,6 +3,7 @@ package com.rollingstone.gstyle.service.notice;
 import com.rollingstone.gstyle.dao.notice.NoticeDAO;
 import com.rollingstone.gstyle.dto.notice.RequestNoticeDTO;
 import com.rollingstone.gstyle.dto.notice.ResponseNoticeDTO;
+import com.rollingstone.gstyle.dto.notice.UpdateNoticeDTO;
 import com.rollingstone.gstyle.entity.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public ResponseNoticeDTO updateNotice(Long id, String title, String description) throws Exception {
-        Notice changeNotice = noticeDAO.updateNotice(id, title, description);
+    public ResponseNoticeDTO updateNotice(UpdateNoticeDTO updateNoticeDTO) throws Exception {
+        Notice changeNotice = noticeDAO.updateNotice(updateNoticeDTO.getId(), updateNoticeDTO.getTitle(), updateNoticeDTO.getDescription());
         return new ResponseNoticeDTO(changeNotice);
     }
 

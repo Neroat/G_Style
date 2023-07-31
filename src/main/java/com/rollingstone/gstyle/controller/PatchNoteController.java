@@ -2,6 +2,7 @@ package com.rollingstone.gstyle.controller;
 
 import com.rollingstone.gstyle.dto.patchnote.RequestPatchNoteDTO;
 import com.rollingstone.gstyle.dto.patchnote.ResponsePatchNoteDTO;
+import com.rollingstone.gstyle.dto.patchnote.UpdatePatchNoteDTO;
 import com.rollingstone.gstyle.service.DefaultValidIdPwd;
 import com.rollingstone.gstyle.service.patchnote.PatchNoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class PatchNoteController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponsePatchNoteDTO> update(@RequestParam Long id, @RequestParam String title, @RequestParam String description) throws Exception {
-        ResponsePatchNoteDTO responsePatchNoteDTO = patchNoteService.updatePatchNote(id, title, description);
+    public ResponseEntity<ResponsePatchNoteDTO> update(@RequestBody UpdatePatchNoteDTO updatePatchNoteDTO) throws Exception {
+        ResponsePatchNoteDTO responsePatchNoteDTO = patchNoteService.updatePatchNote(updatePatchNoteDTO);
         return ResponseEntity.status(HttpStatus.OK).body(responsePatchNoteDTO);
     }
 

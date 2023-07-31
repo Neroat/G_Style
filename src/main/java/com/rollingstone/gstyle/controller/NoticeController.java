@@ -2,6 +2,7 @@ package com.rollingstone.gstyle.controller;
 
 import com.rollingstone.gstyle.dto.notice.RequestNoticeDTO;
 import com.rollingstone.gstyle.dto.notice.ResponseNoticeDTO;
+import com.rollingstone.gstyle.dto.notice.UpdateNoticeDTO;
 import com.rollingstone.gstyle.service.DefaultValidIdPwd;
 import com.rollingstone.gstyle.service.notice.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,8 @@ public class NoticeController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseNoticeDTO> updateNotice(@RequestParam Long id, @RequestParam String title, @RequestParam String description) throws Exception{
-        ResponseNoticeDTO result = noticeService.updateNotice(id, title, description);
+    public ResponseEntity<ResponseNoticeDTO> updateNotice(@RequestBody UpdateNoticeDTO updateNoticeDTO) throws Exception{
+        ResponseNoticeDTO result = noticeService.updateNotice(updateNoticeDTO);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
