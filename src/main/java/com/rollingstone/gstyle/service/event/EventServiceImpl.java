@@ -66,21 +66,21 @@ public class EventServiceImpl implements EventService{
         //1학년 1반 ~ 14반 기입
         for(int i = 101; i<=114; i++) {
             String sql =
-                    "INSERT INTO SURVEY_EVENT (STUNO, CLASSCOUNT) VALUES ('" + i + "', '0');";
+                    "insert into survey_event (stuno, classcount) values ('" + i + "', '0');";
             entityManager.createNativeQuery(sql).executeUpdate();
         }
 
         //2학년 1반 ~ 14반 기입
         for(int i = 201; i<=214; i++) {
             String sql =
-                    "INSERT INTO SURVEY_EVENT (STUNO, CLASSCOUNT) VALUES ('" + i + "', '0');";
+                    "insert into survey_event (stuno, classcount) values ('" + i + "', '0');";
             entityManager.createNativeQuery(sql).executeUpdate();
         }
 
         //3학년 1반 ~ 14반 기입
         for(int i = 301; i<=314; i++) {
             String sql =
-                    "INSERT INTO SURVEY_EVENT (STUNO, CLASSCOUNT) VALUES ('" + i + "', '0');";
+                    "insert into survey_event (stuno, classcount) values ('" + i + "', '0');";
             entityManager.createNativeQuery(sql).executeUpdate();
         }
 
