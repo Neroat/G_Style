@@ -8,6 +8,7 @@ import com.rollingstone.gstyle.dto.survey.ResponseSurveyDTO;
 import com.rollingstone.gstyle.entity.Survey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +28,7 @@ public class SurveyServiceImpl implements SurveyService{
         this.eventDAO = eventDAO;
     }
 
+    @Transactional
     @Override
     public ResponseSurveyDTO saveSurvey(RequestSurveyDTO requestSurveyDTO) throws Exception {
         String nowTime = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now());
@@ -38,36 +40,42 @@ public class SurveyServiceImpl implements SurveyService{
             survey.setErating(requestSurveyDTO.getErating());
             survey.setCreatedAt(nowTime);
             survey.setDetailSurvey(requestSurveyDTO.getDetailSurvey());
-
-            Survey saveSurvey = surveyDAO.insertSurvey(survey);
-            Long edit_stuNo = editStuNo(saveSurvey.getStuno());
+            Long edit_stuNo = editStuNo(survey.getStuno());
+            //Long edit_stuNo = editStuNo(saveSurvey.getStuno());
             System.out.println(edit_stuNo);
-            eventDAO.updateEventCount(edit_stuNo);
+            try {
+                eventDAO.updateEventCount(edit_stuNo);
+                Survey saveSurvey = surveyDAO.insertSurvey(survey);
 
-            ResponseSurveyDTO responseSurveyDTO = new ResponseSurveyDTO();
-            responseSurveyDTO.setId(saveSurvey.getId());
-            responseSurveyDTO.setStuno(saveSurvey.getStuno());
-            responseSurveyDTO.setErating(saveSurvey.getErating());
-            responseSurveyDTO.setCreatedAt(saveSurvey.getCreatedAt());
-            //List<String> splitSurveyOne = Arrays.asList(requestSurveyDTO.getDetailSurvey().split("|"));
-            System.out.println(saveSurvey.getDetailSurvey());
-            String [] splitSurveyOne = saveSurvey.getDetailSurvey().split("\\|");
-            for(int i=0; i< splitSurveyOne.length; i++) {
-                System.out.println(splitSurveyOne[i]+ " 다음칸 ");
+
+                ResponseSurveyDTO responseSurveyDTO = new ResponseSurveyDTO();
+                responseSurveyDTO.setId(saveSurvey.getId());
+                responseSurveyDTO.setStuno(saveSurvey.getStuno());
+                responseSurveyDTO.setErating(saveSurvey.getErating());
+                responseSurveyDTO.setCreatedAt(saveSurvey.getCreatedAt());
+                //List<String> splitSurveyOne = Arrays.asList(requestSurveyDTO.getDetailSurvey().split("|"));
+                System.out.println(saveSurvey.getDetailSurvey());
+                String [] splitSurveyOne = saveSurvey.getDetailSurvey().split("\\|");
+                for(int i=0; i< splitSurveyOne.length; i++) {
+                    System.out.println(splitSurveyOne[i]+ " 다음칸 ");
+                }
+
+                List<SplitSurveyDTO> splitSurveyDTOList = new ArrayList<>();
+                for(int i=0; i<splitSurveyOne.length; i++) {
+                    String[] splitSurveyTwo = splitSurveyOne[i].split("\\_");
+                    SplitSurveyDTO splitSurveyDTO = new SplitSurveyDTO();
+                    splitSurveyDTO.setMenu_name(splitSurveyTwo[0]);
+                    splitSurveyDTO.setDetail_rating(splitSurveyTwo[1]);
+                    splitSurveyDTO.setDetail_reason(splitSurveyTwo[2]);
+                    splitSurveyDTOList.add(splitSurveyDTO);
+                }
+                responseSurveyDTO.setSplitSurveyDTOList(splitSurveyDTOList);
+                System.out.println(responseSurveyDTO);
+                return responseSurveyDTO;
+            } catch (Exception e) {
+                throw new Exception("학년반을 제대로 입력해주세요.");
             }
 
-            List<SplitSurveyDTO> splitSurveyDTOList = new ArrayList<>();
-            for(int i=0; i<splitSurveyOne.length; i++) {
-                String[] splitSurveyTwo = splitSurveyOne[i].split("\\_");
-                SplitSurveyDTO splitSurveyDTO = new SplitSurveyDTO();
-                splitSurveyDTO.setMenu_name(splitSurveyTwo[0]);
-                splitSurveyDTO.setDetail_rating(splitSurveyTwo[1]);
-                splitSurveyDTO.setDetail_reason(splitSurveyTwo[2]);
-                splitSurveyDTOList.add(splitSurveyDTO);
-            }
-            responseSurveyDTO.setSplitSurveyDTOList(splitSurveyDTOList);
-            System.out.println(responseSurveyDTO);
-            return responseSurveyDTO;
 
         }   else throw new Exception("설문조사 응답여부 및 등록 Exception");
     }
